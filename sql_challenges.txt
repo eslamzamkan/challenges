@@ -10,6 +10,7 @@ select e1.name as Employee from Employee e1
 join Employee e2
 on e2.id=e1.managerId 
 where e2.salary < e1.salary
+
 182. Duplicate Emails
 //
 select email as Email from person  
@@ -18,4 +19,15 @@ having count(email)>1
 
 183. Customers Who Never Order
 select name as Customers from Customers 
- where id not in(select customerId from Orders)
+where id not in(select customerId from Orders)
+
+196. Delete Duplicate Emails
+//
+delete from person
+where id not in(select min(id) from person group by email)
+
+197. Rising Temperature
+select w1.id from Weather w1,Weather w2
+where w2.recordDate = dateadd(day,-1,w1.recordDate)
+and w2.temperature < w1.temperature 
+

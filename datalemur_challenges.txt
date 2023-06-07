@@ -2,3 +2,30 @@ Page With No Likes [Facebook SQL Interview Question]
 //
 select page_id from  pages  
 where page_id not in(select page_id from page_likes)
+another sol///
+SELECT page_id
+FROM pages
+EXCEPT
+SELECT page_id
+FROM page_likes;
+
+Unfinished Parts [Tesla SQL Interview Question]
+//
+SELECT part,assembly_step FROM parts_assembly 
+where finish_date is null
+
+Laptop vs. Mobile Viewership [New York Times SQL Interview Question]
+//select 
+sum(case when device_type='laptop' then 1 else 0 end)as laptop_views ,
+sum(case when device_type<>'laptop' then 1 else 0 end)as mobile_views
+from viewership 
+
+Data Science Skills [LinkedIn SQL Interview Question]
+//
+SELECT candidate_id 
+FROM candidates
+where skill in ('Python','Tableau','PostgreSQL')
+group by candidate_id 
+HAVING count(skill)=3
+
+

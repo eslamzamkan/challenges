@@ -49,3 +49,13 @@ where b.bonus < 1000 or b.bonus is null
 select name from Customer 
 where referee_id <>2 or referee_id is null
 
+586. Customer Placing the Largest Number of Orders
+//
+select top 1 customer_number from Orders 
+group by customer_number 
+order by count((customer_number)) desc
+
+595. Big Countries
+//
+select name, population,area from World
+where area>=3000000 or population >=25000000

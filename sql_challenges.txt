@@ -27,9 +27,6 @@ delete from person
 where id not in(select min(id) from person group by email)
 
 197. Rising Temperature
-select w2.id from Weather w2,Weather w1
-where w1.recordDate = dateadd(day,-1,w2.recordDate)
-and w1.temperature < w2.temperature 
 //
 select w1.id from Weather w1,Weather w2
 where w2.recordDate = dateadd(day,-1,w1.recordDate)

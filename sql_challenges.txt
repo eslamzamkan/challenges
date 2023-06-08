@@ -32,3 +32,20 @@ select w1.id from Weather w1,Weather w2
 where w2.recordDate = dateadd(day,-1,w1.recordDate)
 and w2.temperature < w1.temperature 
 
+511. Game Play Analysis I
+//
+select  player_id,min(event_date) as first_login  from Activity
+group by player_id
+
+577. Employee Bonus
+//
+select e.name,b.bonus from Employee e
+left join Bonus b
+on e.empId=b.empId 
+where b.bonus < 1000 or b.bonus is null 
+
+584. Find Customer Referee
+//
+select name from Customer 
+where referee_id <>2 or referee_id is null
+

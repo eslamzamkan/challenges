@@ -76,3 +76,19 @@ and a1.machine_id=a2.machine_id
 and a2.timestamp >a1.timestamp 
 group by a1.machine_id 
 
+1934. Confirmation Rate
+//
+select s.user_id,round(cast(count(case when action='confirmed' then 1 else null end)as float)/count(*),2) as confirmation_rate 
+ from Signups s
+left join Confirmations c
+on s.user_id =c.user_id 
+group by s.user_id
+
+570. Managers with at Least 5 Direct Reports
+//
+select e1.name from Employee e1
+inner join Employee e2
+on e1.id=e2.managerId 
+group by e1.name
+having count(e2.managerId)>=5
+

@@ -101,6 +101,12 @@ on p.product_id=u.product_id
 and purchase_date between start_date and end_date
 group by p.product_id
 
-
+1075. Project Employees I
+//
+select p.project_id,round(avg(cast(e.experience_years as decimal)),2) 
+as average_years from Project p
+inner join Employee e
+on e.employee_id=p.employee_id
+group by p.project_id
 
 

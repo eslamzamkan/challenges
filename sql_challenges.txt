@@ -115,3 +115,39 @@ select contest_id, round(count(r.contest_id)*100.00/(select count(*) from users)
 from Register r
 group by contest_id 
 order by percentage desc, contest_id asc;
+
+-1211. Queries Quality and Percentage
+///
+select query_name,round(sum(rating*1.0/position)/count(*),2) as quality,
+round(sum(case when rating<3 then 1 else 0 end) *100.0/count(*) ,2) as poor_query_percentage
+from Queries 
+group by query_name 
+
+1141. User Activity for the Past 30 Days I
+////
+SELECT activity_date AS day,COUNT(DISTINCT user_id) AS active_users
+FROM Activity
+WHERE activity_date between '2019-06-28' AND '2019-07-27'
+GROUP BY activity_date;
+
+
+596. Classes More Than 5 Students
+///
+select class from Courses 
+group by class
+having count(student)>=5
+
+1729. Find Followers Count
+////
+select user_id,count(follower_id )as followers_count from Followers
+group by user_id
+
+619. Biggest Single Number
+///
+select max(num) as num from MyNumbers
+where num in(select max(num)as num from MyNumbers
+group by num
+having count(*)=1)
+
+1070. Product Sales Analysis III
+///

@@ -149,3 +149,9 @@ where num in(select max(num)as num from MyNumbers
 group by num
 having count(*)=1)
 
+176. Second Highest Salary
+///
+select  max(salary)  as SecondHighestSalary from Employee
+where salary not in(select max(salary) from Employee)
+
+

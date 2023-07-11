@@ -154,4 +154,6 @@ having count(*)=1)
 select  max(salary)  as SecondHighestSalary from Employee
 where salary not in(select max(salary) from Employee)
 
-
+1527. Patients With a Condition
+///
+select * from Patients where conditions like '% DIAB1%' or conditions like 'DIAB1%'

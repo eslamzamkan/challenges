@@ -157,3 +157,8 @@ where salary not in(select max(salary) from Employee)
 1527. Patients With a Condition
 ///
 select * from Patients where conditions like '% DIAB1%' or conditions like 'DIAB1%'
+
+2356. Number of Unique Subjects Taught by Each Teacher
+///
+select teacher_id  ,count(distinct subject_id  )as cnt from Teacher
+group by teacher_id

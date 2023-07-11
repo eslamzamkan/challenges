@@ -162,3 +162,8 @@ select * from Patients where conditions like '% DIAB1%' or conditions like 'DIAB
 ///
 select teacher_id  ,count(distinct subject_id  )as cnt from Teacher
 group by teacher_id
+
+1517. Find Users With Valid E-Mails
+///
+select * from Users where mail like'[a-zA-Z]%@leetcode.com'
+and mail not like'%[^a-zA-Z0-9_.-]%@leetcode.com'

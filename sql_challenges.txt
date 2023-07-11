@@ -177,5 +177,15 @@ where month(o.order_date)=2 and year(o.order_date)='2020'
 group by P.product_name       
 having sum(o.unit)>=100
 
+1731. The Number of Employees Which Report to Each Employee
+///
+select e1.employee_id,e1.name,count(e2.reports_to) as reports_count,
+round(avg(e2.age*1.00),0) as average_age  
+from Employees e1 join Employees e2
+on e1.employee_id=e2.reports_to
+group by e1.employee_id,e1.name
+having count(e2.reports_to)>=1
+order by e1.employee_id
+
 
 

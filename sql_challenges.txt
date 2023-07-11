@@ -167,3 +167,15 @@ group by teacher_id
 ///
 select * from Users where mail like'[a-zA-Z]%@leetcode.com'
 and mail not like'%[^a-zA-Z0-9_.-]%@leetcode.com'
+
+1327. List the Products Ordered in a Period
+///
+select P.product_name,sum(unit) as unit from Products p 
+inner join Orders o 
+on o.product_id=p.product_id 
+where month(o.order_date)=2 and year(o.order_date)='2020'
+group by P.product_name       
+having sum(o.unit)>=100
+
+
+

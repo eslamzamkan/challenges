@@ -187,5 +187,15 @@ group by e1.employee_id,e1.name
 having count(e2.reports_to)>=1
 order by e1.employee_id
 
+1070. Product Sales Analysis III
+///
+select product_id ,(year) as first_year,quantity,price from Sales s
+where year in(select min(year) from Sales s1
+where s.product_id=s1.product_id
+group by product_id
+)
+
+
+
 
 

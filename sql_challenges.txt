@@ -213,3 +213,7 @@ when x+y>z and z+x>y and z+y>x then 'Yes'
 else 'No' end as triangle 
   from Triangle
 
+178. Rank Scores
+///
+select score,dense_rank()over(order by score desc)as rank 
+from Scores 

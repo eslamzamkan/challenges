@@ -217,3 +217,12 @@ else 'No' end as triangle
 ///
 select score,dense_rank()over(order by score desc)as rank 
 from Scores 
+
+184. Department Highest Salary
+///
+select Department,Employee,Salary from
+(
+    select e.id,d.name as Department,e.name as Employee ,e.salary as Salary ,rank()over(partition by d.name order by e.salary desc) as Rank
+   from  Employee e,Department d
+    where e.departmentId =d.id) as th 
+    where Rank=1

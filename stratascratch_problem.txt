@@ -1,0 +1,86 @@
+Most Profitable Companies
+
+select top 3 company,profits from forbes_global_2010_2014 order by profits desc;
+//////////////////////////////////////
+Workers With The Highest Salaries
+
+select worker_title as the_best_paid from title t
+inner join worker w
+on w.worker_id=t.worker_ref_id
+where salary=(select max(salary)from worker)
+;
+
+
+//////////////////////////////////////
+
+Finding Updated Records
+
+select id,first_name,last_name,department_id,max(salary) from ms_employee_salary
+group by id,first_name,last_name,department_id
+order by id 
+
+/////////////////////////////////////
+
+Bikes Last Used
+
+select bike_number,max(end_time) as last_used from dc_bikeshare_q1_2012
+group by bike_number
+order by last_used desc
+
+/////////////////////////////////////
+
+Reviews of Hotel Arena
+
+select hotel_name,reviewer_score,count(reviewer_score) from hotel_reviews
+where hotel_name='Hotel Arena'
+group by reviewer_score,hotel_name
+
+////////////////////////////////////
+
+Count the number of movies that Abigail Breslin nominated for oscar
+
+select count(movie) as n_movies_by_abi from oscar_nominees
+where nominee='Abigail Breslin'
+group by movie
+
+/////////////////////////////////
+
+Find all posts which were reacted to with a heart
+
+select distinct r.post_id,r.poster,p.post_text,p.post_keywords,p.post_date from 
+facebook_reactions r,facebook_posts p
+where r.post_id=p.post_id
+and reaction='heart';
+
+/////////////////////////////////
+Popularity of Hack
+
+select location,avg(popularity*1.00) from facebook_employees e
+,facebook_hack_survey h
+where e.id=h.employee_id
+group by location
+
+////////////////////////////////
+
+Lyft Driver Wages
+
+select * from lyft_drivers where yearly_salary<=30000 or yearly_salary>70000;
+
+////////////////////////////////
+Find how many times each artist appeared on the Spotify ranking list
+
+select artist,count(id)as n_occurrences from spotify_worldwide_daily_song_ranking
+group by artist
+order by n_occurrences desc
+;
+
+/////////////////////////////
+
+Find the base pay for Police Captains
+
+select employeename,
+basepay from sf_public_salaries
+where jobtitle like '%CAPTAIN%POLICE%' 
+;
+
+//////////////////////////////

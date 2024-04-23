@@ -1,31 +1,224 @@
-Page With No Likes [Facebook SQL Interview Question]
-//
-select page_id from  pages  
-where page_id not in(select page_id from page_likes)
-another sol///
-SELECT page_id
-FROM pages
-EXCEPT
-SELECT page_id
-FROM page_likes;
+///////  easy problems //////////////
 
-Unfinished Parts [Tesla SQL Interview Question]
-//
-SELECT part,assembly_step FROM parts_assembly 
-where finish_date is null
+Histogram of Tweets [Twitter SQL Interview Question]
 
-Laptop vs. Mobile Viewership [New York Times SQL Interview Question]
-//select 
-sum(case when device_type='laptop' then 1 else 0 end)as laptop_views ,
-sum(case when device_type<>'laptop' then 1 else 0 end)as mobile_views
-from viewership 
+select tweet_count as tweet_bucket,count(*) as users_num
+from(
+select user_id,count(*) as tweet_count 
+from tweets
+where extract(year from tweet_date)=2022
+group by user_id 
+)as tweete
+group by tweet_count
+order by tweet_count
+
+////////////////////////////////////////////////
 
 Data Science Skills [LinkedIn SQL Interview Question]
-//
-SELECT candidate_id 
-FROM candidates
-where skill in ('Python','Tableau','PostgreSQL')
-group by candidate_id 
-HAVING count(skill)=3
+
+select candidate_id from candidates 
+where skill in ('PostgreSQL','Python','Tableau')
+group by candidate_id
+having count(skill)=3
+
+///////////////////
+Page With No Likes [Facebook SQL Interview Question]
+
+SELECT page_id FROM pages 
+except
+select page_id FROM page_likes
+;
+///////////////////////
+Unfinished Parts [Tesla SQL Interview Question]
+
+SELECT part,assembly_step FROM parts_assembly
+where finish_date is null
+;
+////////////////////
+Laptop vs. Mobile Viewership [New York Times SQL Interview Question]
+
+select 
+sum(case when device_type='laptop' then 1 else 0 end)as laptop_views,
+sum(case when device_type='tablet' or device_type='phone' then 1 else 0 end)
+as mobile_views
+from viewership
+/////////////////////////
+Average Post Hiatus (Part 1) [Facebook SQL Interview Question]
+
+select user_id,
+extract(day from max(post_date)-min(post_date)) as days_between
+from posts
+where EXTRACT(year from post_date)=2021
+group by user_id 
+having count(post_date)>=2
+////////////////////////////
+Teams Power Users [Microsoft SQL Interview Question]
+
+SELECT sender_id,count(message_id) as message_count FROM messages where 
+EXTRACT(month from sent_date)=8
+and EXTRACT(year from sent_date)=2022
+group by sender_id
+ORDER BY message_count DESC
+FETCH FIRST 2 ROWS ONLY
+
+///////////////////////////
+Duplicate Job Listings [Linkedin SQL Interview Question]
+
+select count(distinct company_id)as duplicate_companies  from(
+select company_id,title,description
+from job_listings
+group by company_id,title,description
+having count(company_id)>1 
+)as t
+/////////////////////////////SELECT app_id,
+round(100.0 *
+count(case when event_type = 'click' then 1 else null end)/
+count(case when event_type = 'impression' then 1 else null end),2) as ctr
+FROM events
+WHERE timestamp >= '2022-01-01' and  timestamp < '2023-1-1'
+group by app_id
 
 
+Cities With Completed Trades [Robinhood SQL Interview Question]
+
+SELECT u.city,count(t.user_id) as total_orders FROM trades t
+inner join users u
+on t.user_id=u.user_id
+where t.status='Completed'
+group by u.city
+order by total_orders desc
+FETCH FIRST 3 ROWS ONLY;
+//////////////////////////////
+Average Review Ratings [Amazon SQL Interview Question]
+
+SELECT EXTRACT(month from submit_date)as mth,product_id as product,
+round(avg(stars*1.0),2) 
+as avg_stars
+FROM reviews
+
+////////////////////////////
+group by product_id,EXTRACT(month from submit_date)
+order by mth,product_id
+
+
+App Click-through Rate (CTR) [Facebook SQL Interview Question]
+
+
+
+
+/////////////////////////
+Second Day Confirmation [TikTok SQL Interview Question]
+
+select e.user_id from emails e
+inner join texts t
+on e.email_id=t.email_id
+where signup_action='Confirmed'
+and EXTRACT(day from t.action_date - e.signup_date)=1
+
+////////////////////////////
+Cards Issued Difference [JPMorgan Chase SQL Interview Question]
+
+SELECT card_name,max(issued_amount)-min(issued_amount) as difference FROM monthly_cards_issued
+group by card_name
+order by difference desc
+;
+//////////////////////////////////
+Compressed Mean [Alibaba SQL Interview Question]
+
+
+SELECT ROUND(CAST(SUM(item_count * order_occurrences) AS DECIMAL)
+/ SUM(order_occurrences), 1) AS mean
+FROM items_per_order;
+
+/////////////////////////////////
+
+Pharmacy Analytics (Part 1) [CVS Health SQL Interview Question]
+
+select drug,total_profit from (
+SELECT drug,total_sales - cogs AS total_profit,
+row_number() over(order by total_sales - cogs desc) as rn
+FROM pharmacy_sales
+) as ranked
+where rn<=3
+
+///////////////////////////////
+Pharmacy Analytics (Part 2) [CVS Health SQL Interview Question]
+
+SELECT
+  manufacturer,
+  COUNT(drug) AS drug_count, 
+  SUM(cogs - total_sales) AS total_loss
+FROM pharmacy_sales
+WHERE cogs > total_sales
+GROUP BY manufacturer
+ORDER BY total_loss DESC;
+
+///////////////////////////////
+Who Made Quota? [Oracle SQL Interview Question]
+
+SELECT d.employee_id,case when sum(d.deal_size)>quota then 'yes' else 'no' end
+as made_quota
+FROM deals d
+inner join sales_quotas s
+on d.employee_id=s.employee_id
+group by d.employee_id,quota
+order by d.employee_id
+
+//////////////////////////////////////
+Pharmacy Analytics (Part 3) [CVS Health SQL Interview Question]
+
+SELECT 
+    manufacturer,
+    CONCAT('$', CAST(ROUND(SUM(total_sales) / 1000000) AS INT), ' million') AS sale
+FROM 
+    pharmacy_sales
+GROUP BY 
+    manufacturer
+ORDER BY 
+    SUM(total_sales) DESC,
+    manufacturer;
+
+
+//////// medium problems  //////////////
+
+
+
+/////////////////////////////////////////////////////
+User's Third Transaction [Uber SQL Interview Question]
+
+SELECT user_id,spend,transaction_date FROM (
+SELECT user_id,spend,transaction_date ,row_number()over(PARTITION BY user_id order by transaction_date) as rn 
+FROM transactions
+)as ranked where rn=3
+
+
+//////////////////////////////////
+
+Highest-Grossing Items [Amazon SQL Interview Question]
+
+SELECT category,product,total_spend FROM(
+SELECT category,product,sum(spend) as total_spend,
+row_number() over (PARTITION BY category order by sum(spend) desc) as rn 
+FROM product_spend
+where EXTRACT(year from transaction_date)=2022
+group by category,product
+) as tot where rn <=2;
+///////////////////////////////
+
+Sending vs. Opening Snaps [Snapchat SQL Interview Question]
+
+select ab.age_bucket,
+ROUND(
+(SUM(case when activity_type='open' then time_spent else 0 end)/
+nullif(sum(case when activity_type in('send','open')then time_spent else 0 end)
+,0))*100,2)  AS  open_perc,
+ROUND((SUM(case when activity_type='send' then time_spent else 0 end)/
+nullif(sum(case when activity_type in('send','open')then time_spent else 0 end)
+,0))*100,2)  AS send_perc
+FROM
+    activities a
+JOIN
+    age_breakdown ab ON a.user_id = ab.user_id
+GROUP BY
+    ab.age_bucket;
+//////////////////////////////////

@@ -84,3 +84,118 @@ where jobtitle like '%CAPTAIN%POLICE%'
 ;
 
 //////////////////////////////
+
+Find libraries who haven't provided the email address in circulation year 2016 but their notice preference definition is set to email
+
+select DISTINCT home_library_code from library_usage
+where 
+     notice_preference_definition = 'email' AND
+     provided_email_address = 0 AND
+     circulation_active_year = 2016;
+ 
+///////////////////////////////
+
+Average Salaries
+
+select  department,first_name,salary,AVG(cast(salary AS float)) over (PARTITION by department)
+as dept_avg_sal from employee
+GROUP BY department,first_name,salary
+ ;
+
+///////////////////////////////
+
+Order Details
+
+select first_name,order_date,order_details,total_order_cost from customers c
+inner join orders o
+on c.id=o.cust_id
+where first_name in ('Jill','Eva')
+order by first_name desc
+;
+/////////////////////////////
+Customer Details
+
+select first_name,last_name,city,order_details from customers c
+left join orders o
+on c.id=o.cust_id
+order by first_name,order_details
+;
+//////////////////////////////
+
+Number Of Bathrooms And Bedrooms
+
+select city,property_type,avg(bathrooms*1.0),avg(bedrooms*1.0) from airbnb_search_details
+group by city,property_type;
+
+//////////////////////////////
+Count the number of user events performed by MacBookPro users
+
+select 
+     event_name,
+     count(*) as event_count
+     from playbook_events
+where
+    device ='MacBook Pro'
+group by
+     event_name
+order by
+   event_count desc
+;
+/////////////////////////////
+Find the most profitable company in the financial sector of the entire world along with its continent
+
+select company,continent from forbes_global_2010_2014
+where profits =(select max(profits)from forbes_global_2010_2014)
+;
+///////////////////////////////
+
+
+Churro Activity Date
+
+select activity_date,pe_description from los_angeles_restaurant_health_inspections
+where score <95 and facility_name='STREET CHURROS' ;
+
+//////////////////////////////
+
+Admin Department Employees Beginning in April or Later
+
+select count(*) as n_admins from worker where department='Admin' and
+month(joining_date)>=4
+;
+
+//////////////////////////
+Number of Workers by Department Starting in April or Later
+
+select department,count(*) as num_workers from worker
+where month(joining_date)>=4  
+group by department
+order by num_workers desc;
+///////////////////////////
+
+Most Lucrative Products
+
+select top 5 product_id,sum(cost_in_dollars*units_sold) as revenue
+from online_orders
+where month(date) between 1 and 6
+group by product_id  
+order by revenue desc ;
+
+/////////////////////////
+
+Number of Shipments Per Month
+
+select concat(year(shipment_date),'-',month(shipment_date))as year_month,count(*) 
+from amazon_shipment
+group by concat(year(shipment_date),'-',month(shipment_date))
+order by year_month
+;
+
+///////////////////////////
+
+Unique Users Per Client Per Month
+
+select client_id,month(time_id) as month,count(distinct user_id)as users_num
+from fact_events
+group by client_id,month(time_id)
+;
+///////////////////////////
